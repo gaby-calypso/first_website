@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { Hero } from "@/components/Hero/Hero";
 import { CocktailCard } from "@/components/CocktailCard/CocktailCard";
@@ -8,6 +9,7 @@ import { searchCocktails, Cocktail } from "@/services/cocktails";
 
 export default function Home() {
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     searchCocktails("a").then(setCocktails);
@@ -24,7 +26,7 @@ export default function Home() {
             imageUrl={cocktail.strDrinkThumb}
             cocktailName={cocktail.strDrink}
             category={cocktail.strCategory}
-            onClick={() => console.log(cocktail.idDrink)}
+            onClick={() => router.push(`/cocktail/${cocktail.idDrink}`)}
           />
         ))}
       </div>
