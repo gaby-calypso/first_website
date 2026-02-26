@@ -1,18 +1,34 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { getCocktailById, Cocktail } from "@/services/cocktails";
+import {
+  getCocktailById,
+  getCocktailsByCategory,
+  Cocktail,
+} from "@/services/cocktails";
+import { CocktailCard } from "@/components/CocktailCard/CocktailCard";
 
 export default function CocktailDetail() {
   const { id } = useParams();
+  const router = useRouter();
   const [cocktail, setCocktail] = useState<Cocktail | null>(null);
+  const [recommendations, setRecommendations] = useState<Cocktail[]>([]);
 
   useEffect(() => {
     if (id) {
-      getCocktailById(id as string).then(setCocktail);
+      getCocktailById(id as string).then((data) => {
+        setCocktail(data);
+        if (data?.strCategory) {
+          getCocktailsByCategory(data.strCategory).then((results) => {
+            setRecommendations(
+              results.filter((c) => c.idDrink !== id).slice(0, 3),
+            );
+          });
+        }
+      });
     }
   }, [id]);
 
@@ -51,6 +67,24 @@ export default function CocktailDetail() {
           </p>
         </div>
       </div>
+
+      {recommendations.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-6">También te puede gustar</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {recommendations.map((rec) => (
+              <CocktailCard
+                key={rec.idDrink}
+                id={rec.idDrink}
+                imageUrl={rec.strDrinkThumb}
+                cocktailName={rec.strDrink}
+                category={rec.strCategory}
+                onClick={() => router.push(`/cocktail/${rec.idDrink}`)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
