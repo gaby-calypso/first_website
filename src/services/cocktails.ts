@@ -21,3 +21,19 @@ export const getCocktailById = async (id: string): Promise<Cocktail | null> => {
   const data = await response.json();
   return data.drinks ? data.drinks[0] : null;
 };
+
+export const getCategories = async (): Promise<string[]> => {
+  const response = await fetch(
+    `https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list`
+  );
+  const data = await response.json();
+  return data.drinks.map((d: { strCategory: string }) => d.strCategory);
+};
+
+export const getCocktailsByCategory = async (category: string): Promise<Cocktail[]> => {
+  const response = await fetch(
+    `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`
+  );
+  const data = await response.json();
+  return data.drinks || [];
+};
