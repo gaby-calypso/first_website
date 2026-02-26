@@ -10,7 +10,14 @@ interface CocktailCardProps {
   category: string;
   onClick: () => void;
   id: string;
+  difficulty?: string;
 }
+
+const difficultyStars = {
+  Fácil: "⭐",
+  Medio: "⭐⭐",
+  Difícil: "⭐⭐⭐",
+};
 
 export const CocktailCard = ({
   imageUrl,
@@ -18,10 +25,10 @@ export const CocktailCard = ({
   category,
   onClick,
   id,
+  difficulty,
 }: CocktailCardProps) => {
   const getFavorites = () =>
     JSON.parse(localStorage.getItem("favorites") || "[]");
-
   const [favorite, setFavorite] = useState<boolean>(() =>
     getFavorites().includes(id),
   );
@@ -61,10 +68,20 @@ export const CocktailCard = ({
         </button>
       </div>
       <CardContent className="p-4 flex flex-col gap-1">
-        <p className="text-xs text-amber-500 font-semibold uppercase tracking-widest">
-          {category}
-        </p>
+        <div className="flex justify-between items-center">
+          <p className="text-xs text-amber-500 font-semibold uppercase tracking-widest">
+            {category}
+          </p>
+        </div>
         <p style={{ fontSize: "18px", fontWeight: 700 }}>{cocktailName}</p>
+        {difficulty && (
+          <div className="flex flex-col gap-0.5 mt-1">
+            <p className="text-xs text-gray-400 uppercase tracking-widest">
+              Dificultad
+            </p>
+            <p>{difficultyStars[difficulty as keyof typeof difficultyStars]}</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

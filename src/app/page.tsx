@@ -11,6 +11,7 @@ import {
   searchCocktails,
   getCocktailsByCategory,
   getCategories,
+  getDifficulty,
   Cocktail,
 } from "@/services/cocktails";
 
@@ -63,6 +64,7 @@ export default function Home() {
             imageUrl={cocktail.strDrinkThumb}
             cocktailName={cocktail.strDrink}
             category={cocktail.strCategory}
+            difficulty={getDifficulty(cocktail)}
             onClick={() => router.push(`/cocktail/${cocktail.idDrink}`)}
           />
         ))}
