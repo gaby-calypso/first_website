@@ -23,6 +23,7 @@ export default function Home() {
         {cocktails.map((cocktail) => (
           <CocktailCard
             key={cocktail.idDrink}
+            id={cocktail.idDrink}
             imageUrl={cocktail.strDrinkThumb}
             cocktailName={cocktail.strDrink}
             category={cocktail.strCategory}
