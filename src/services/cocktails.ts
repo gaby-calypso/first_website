@@ -4,7 +4,28 @@ export interface Cocktail {
   strCategory: string;
   strDrinkThumb: string;
   strInstructions: string;
+  strIngredient1: string;
+  strIngredient2: string;
+  strIngredient3: string;
+  strIngredient4: string;
+  strIngredient5: string;
+  strIngredient6: string;
 }
+
+export const getDifficulty = (cocktail: Cocktail): string => {
+  const ingredients = [
+    cocktail.strIngredient1,
+    cocktail.strIngredient2,
+    cocktail.strIngredient3,
+    cocktail.strIngredient4,
+    cocktail.strIngredient5,
+    cocktail.strIngredient6,
+  ].filter(Boolean);
+
+  if (ingredients.length <= 3) return "Fácil";
+  if (ingredients.length <= 5) return "Medio";
+  return "Difícil";
+};
 
 export const searchCocktails = async (query: string): Promise<Cocktail[]> => {
   const response = await fetch(
